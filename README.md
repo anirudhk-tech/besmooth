@@ -28,16 +28,27 @@
 
 ### 3.2 Folder Structure
 /src
+
 /assets // images, GLTF, fonts
+
 /components // UI atoms & molecules
+
 /features
+
 /chat // screens + hooks
+
 /score
+
 /vault
+
 /lib // api, auth, analytics wrappers
+
 /state // zustand stores
+
 /navigation // stack & tab configs
+
 /utils // helpers (validators, formatters)
+
 app.config.ts // Expo app metadata
 
 ### 3.3 Core Patterns
