@@ -20,7 +20,7 @@
 ## 3. Expo App Architecture
 
 ### 3.1 Tech Stack
-- **Frontend:** Expo (React Native 0.74), TypeScript, React Navigation v7, Expo-Speech (TTS), Expo-AV (audio), expo-three + gl-react for avatar render.
+- **Frontend:** Expo (React Native 0.74), TypeScript, Expo Navigation, Expo-Speech (TTS), Expo-AV (audio), expo-three + gl-react for avatar render.
 - **Backend:**  
   - **Edge Functions (Supabase / Cloudflare Workers)** for Gemini calls + scoring prompt.  
   - PostgreSQL (Supabase) for users, sessions, stats.
@@ -56,7 +56,7 @@ app.config.ts // Expo app metadata
 |---------|---------|
 | **API Calls** | `fetcher.ts` w/ typed wrappers + react-query (TanStack). |
 | **LLM Requests** | Server proxy only (never call Gemini from device). |
-| **State** | zustand slices per feature → combined in `/state/index.ts`. |
+| **State** | redux slices per feature → combined in `/state/index.ts`. |
 | **Avatar Render** | Single `<Avatar3D />` component loads GLTF + lip-sync visemes. |
 | **Error Handling** | `ErrorBoundary` HOC + toast (sonner). |
 | **Analytics** | posthog-react-native; wrap events in `analytics.ts`. |
