@@ -1,75 +1,162 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import {
+  Box,
+  Button,
+  ButtonText,
+  Center,
+  HStack,
+  Icon,
+  Pressable,
+  ScrollView,
+  Text,
+  VStack,
+} from "@gluestack-ui/themed";
+import { Lock, User } from "lucide-react-native";
+import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+type Thumb = { id: string; locked: boolean };
+
+const THUMB_SIZE = 72;
+const AVATAR_SIZE = 280;
+
+const initialThumbs: Thumb[] = Array.from({ length: 12 }).map((_, i) => ({
+  id: `slot-${i + 1}`,
+  locked: i > 2,
+}));
+
+// Name + vibe for each avatar slot (make yours real later)
+const AVATAR_META: Record<string, { name: string; tagline: string }> = {
+  "slot-1": { name: "Kushina", tagline: "playful but laser-focused" },
+  "slot-2": { name: "Mira", tagline: "sweet but savage with roasts" },
+  "slot-3": { name: "Zara", tagline: "calm but chaos-coded" },
+  "slot-4": { name: "Nova", tagline: "shy but speedruns sarcasm" },
+  "slot-5": { name: "Aiko", tagline: "gentle but dangerously witty" },
+  "slot-6": { name: "Sora", tagline: "cool but button-masher energy" },
+};
 
 export default function HomeScreen() {
+  const [selectedId, setSelectedId] = useState<string>(initialThumbs[0].id);
+  const meta = AVATAR_META[selectedId] ?? {
+    name: "Mystery",
+    tagline: "unknown but intriguing",
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#0B0D10" }}>
+      <Box flex={1} bg="$appBg" px="$4" pt="$2" style={{ paddingBottom: 100 }}>
+        <VStack space="lg" flex={1}>
+          {/* Top: scrollable selection squares */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <HStack space="md" py="$2">
+              {initialThumbs.map((t) => {
+                const isSelected = t.id === selectedId;
+                return (
+                  <Pressable
+                    key={t.id}
+                    onPress={() => !t.locked && setSelectedId(t.id)}
+                    disabled={t.locked}
+                  >
+                    <Box
+                      style={{ width: THUMB_SIZE, height: THUMB_SIZE }}
+                      bg="$surface"
+                      borderWidth={1}
+                      borderColor={isSelected ? "$brand" : "$border"}
+                      opacity={t.locked ? 0.5 : 1}
+                      rounded="$md"
+                      overflow="hidden"
+                    >
+                      <Center flex={1}>
+                        <Icon
+                          as={t.locked ? Lock : User}
+                          size="lg"
+                          color="$textMuted"
+                        />
+                      </Center>
+                    </Box>
+                  </Pressable>
+                );
+              })}
+            </HStack>
+          </ScrollView>
+
+          {/* Avatar + floating name badge */}
+          <Center flex={8}>
+            <Box position="relative" style={{ width: AVATAR_SIZE }}>
+              {/* Floating badge */}
+              <Box
+                position="absolute"
+                top={-64}
+                left={0}
+                right={0}
+                alignItems="center"
+                style={{ zIndex: 2 }}
+              >
+                <VStack alignItems="center" space="xs">
+                  <Box
+                    px="$4"
+                    py="$2"
+                    bg="$surfaceElevated"
+                    borderWidth={1}
+                    borderColor="$brand"
+                    rounded="$full"
+                  >
+                    <Text
+                      color="$text"
+                      size="2xl"
+                      fontWeight="$bold"
+                      style={{ letterSpacing: 0.5 }}
+                    >
+                      {meta.name}
+                    </Text>
+                  </Box>
+                  <Text
+                    mt="$1"
+                    color="$textMuted"
+                    size="sm"
+                    textAlign="center"
+                    style={{ fontStyle: "italic" }}
+                  >
+                    {meta.tagline}
+                  </Text>
+                </VStack>
+              </Box>
+
+              {/* Avatar placeholder */}
+              <Box
+                style={{ width: AVATAR_SIZE, height: AVATAR_SIZE, zIndex: 1 }}
+                bg="$surfaceElevated"
+                borderWidth={1}
+                borderColor="$border"
+                rounded="$2xl"
+                overflow="hidden"
+                mt="$8"
+              >
+                <Center flex={1}>
+                  <VStack space="sm" alignItems="center">
+                    <Icon as={User} size="xl" color="$textMuted" />
+                    <Text color="$textMuted">Avatar Placeholder</Text>
+                  </VStack>
+                </Center>
+              </Box>
+            </Box>
+          </Center>
+
+          {/* Train */}
+          <Center>
+            <Button
+              size="lg"
+              bg="$brand"
+              rounded="$xl"
+              $active-bg="$brandStrong"
+              $pressed-bg="$brandStrong"
+              width="100%"
+              onPress={() => console.log("Train pressed")}
+            >
+              <ButtonText color="$background">Train</ButtonText>
+            </Button>
+          </Center>
+        </VStack>
+      </Box>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
