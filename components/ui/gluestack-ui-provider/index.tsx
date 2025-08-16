@@ -1,4 +1,4 @@
-import gluestackConfig from "@/theme/config";
+import { gluestackConfig } from "@/theme/config";
 import { GluestackUIProvider as BaseProvider } from "@gluestack-ui/themed";
 import React, { PropsWithChildren } from "react";
 

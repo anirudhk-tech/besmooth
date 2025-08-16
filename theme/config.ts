@@ -1,8 +1,9 @@
 import { config as base } from "@gluestack-ui/config";
 import { createConfig } from "@gluestack-ui/themed";
+import { GoogleGenAI } from "@google/genai";
 import { colors } from "./colors";
 
-const gluestackConfig = createConfig({
+export const gluestackConfig = createConfig({
   ...base,
   tokens: {
     ...base.tokens,
@@ -22,4 +23,7 @@ const gluestackConfig = createConfig({
   },
 });
 
-export default gluestackConfig;
+const GEMINI_KEY = "AIzaSyBoec2rTzOH668_NcB8YnGmfj3TNWSQXmc";
+export const GEMINI_MODEL = "gemini-2.0-flash";
+
+export const gemini = new GoogleGenAI({ apiKey: GEMINI_KEY });

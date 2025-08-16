@@ -11,13 +11,22 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.besmooth.app",
-      "buildNumber": "4"
+      "buildNumber": "7",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "We need mic access for voice input.",
+        "NSSpeechRecognitionUsageDescription": "We convert your speech to text.",
+        "NSPhotoLibraryUsageDescription": "This app may request access to your photo library to let you select images if needed."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "RECORD_AUDIO",
+        "INTERNET"
+      ],
       "edgeToEdgeEnabled": true,
       "package": "com.anirudh_k.besmooth"
     },

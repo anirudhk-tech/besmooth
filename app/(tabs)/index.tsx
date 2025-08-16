@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from "@gluestack-ui/themed";
+import { useRouter } from "expo-router";
 import { Lock, User } from "lucide-react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,14 +25,8 @@ const initialThumbs: Thumb[] = Array.from({ length: 12 }).map((_, i) => ({
   locked: i > 2,
 }));
 
-// Name + vibe for each avatar slot (make yours real later)
 const AVATAR_META: Record<string, { name: string; tagline: string }> = {
   "slot-1": { name: "Kushina", tagline: "playful but laser-focused" },
-  "slot-2": { name: "Mira", tagline: "sweet but savage with roasts" },
-  "slot-3": { name: "Zara", tagline: "calm but chaos-coded" },
-  "slot-4": { name: "Nova", tagline: "shy but speedruns sarcasm" },
-  "slot-5": { name: "Aiko", tagline: "gentle but dangerously witty" },
-  "slot-6": { name: "Sora", tagline: "cool but button-masher energy" },
 };
 
 export default function HomeScreen() {
@@ -40,6 +35,7 @@ export default function HomeScreen() {
     name: "Mystery",
     tagline: "unknown but intriguing",
   };
+  const router = useRouter();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0B0D10" }}>
@@ -150,7 +146,12 @@ export default function HomeScreen() {
               $active-bg="$brandStrong"
               $pressed-bg="$brandStrong"
               width="100%"
-              onPress={() => console.log("Train pressed")}
+              onPress={() =>
+                router.push({
+                  pathname: "/train/[id]",
+                  params: { id: selectedId },
+                })
+              }
             >
               <ButtonText color="$background">Train</ButtonText>
             </Button>
